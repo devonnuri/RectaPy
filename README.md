@@ -8,7 +8,7 @@
 
 ## Todo List
 
-* [ ] Lexer implementation
+* [x] Lexer implementation
 
 ## Example
 
