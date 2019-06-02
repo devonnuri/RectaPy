@@ -1,7 +1,14 @@
+from rectapy import Lexer
+
+
 class RectaPy:
     @staticmethod
     def run(code: str) -> None:
-        pass
+        lexer = Lexer(code)
+
+        tokens = lexer.tokenize()
+
+        print('\n'.join(map(str, tokens)))
 
     @staticmethod
     def run_file(filename: str) -> None:
