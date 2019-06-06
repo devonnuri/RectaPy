@@ -6,6 +6,8 @@ class TokenType(Enum):
     RIGHT_PAREN = auto()
     LEFT_BRACE = auto()
     RIGHT_BRACE = auto()
+    LEFT_BRACKET = auto()
+    RIGHT_BRACKET = auto()
     SEMICOLON = auto()
 
     COMMA = auto()
@@ -30,6 +32,8 @@ class TokenType(Enum):
     NUMBER = auto()
     SINGLE_STRING = auto()
     DOUBLE_STRING = auto()
+
+    EOF = auto()
 
     IF = 'if'
     ELSE = 'else'

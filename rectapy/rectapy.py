@@ -6,7 +6,7 @@ class RectaPy:
     def run(code: str) -> None:
         lexer = Lexer(code)
 
-        tokens = lexer.tokenize()
+        tokens = lexer.lex()
 
         print('\n'.join(map(str, tokens)))
 

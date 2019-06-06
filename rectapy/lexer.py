@@ -1,7 +1,6 @@
 from typing import List, Optional
 
-from rectapy import Token, TokenType
-
+from rectapy import Token, TokenType, InvalidSyntax
 
 class Lexer:
     def __init__(self, source):
@@ -11,10 +10,12 @@ class Lexer:
         self.current = 0
         self.line = 1
 
-    def tokenize(self) -> List[Token]:
+    def lex(self) -> List[Token]:
         while not self.is_end():
             self.start = self.current
             self.scan_token()
+
+        self.tokens.append(Token(TokenType.EOF, ''))
 
         return self.tokens
 
@@ -29,6 +30,10 @@ class Lexer:
             self.add_token(TokenType.LEFT_BRACE)
         elif ch == '}':
             self.add_token(TokenType.RIGHT_BRACE)
+        elif ch == '[':
+            self.add_token(TokenType.LEFT_BRACKET)
+        elif ch == ']':
+            self.add_token(TokenType.RIGHT_BRACKET)
         elif ch == ',':
             self.add_token(TokenType.COMMA)
         elif ch == '.':
@@ -66,8 +71,7 @@ class Lexer:
                 self.advance()
 
             if self.is_end():
-                print('Unterminated string')
-                return
+                raise InvalidSyntax('Unterminated string')
 
             self.advance()
             self.add_token(TokenType.DOUBLE_STRING if ch == '"' else TokenType.SINGLE_STRING)
@@ -92,7 +96,7 @@ class Lexer:
             else:
                 self.add_token(TokenType.IDENTIFIER)
         else:
-            print('Unexpected token')
+            raise InvalidSyntax('Unexpected token')
 
     def is_end(self) -> bool:
         return self.current >= len(self.source)
