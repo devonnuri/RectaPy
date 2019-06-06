@@ -1,4 +1,9 @@
 from rectapy import RectaPy
 
 if __name__ == '__main__':
-    RectaPy.run('[input(), input()].map(int).reduce(+).print()')
+    RectaPy.run("""
+// asdf
+if a <= 2 {
+    'something'.print()
+}
+""".strip())

@@ -10,4 +10,4 @@ class Token:
         self.literal: Optional[object] = literal
 
     def __str__(self):
-        return f'{self.type.name} {self.lexeme}'
+        return f'{self.type.name} {self.lexeme} {self.literal or ""}'

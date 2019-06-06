@@ -1,14 +1,15 @@
 from typing import List, Optional
 
-from rectapy import Token, TokenType, InvalidSyntax
+from rectapy import Token, TokenType, InvalidSyntaxError
+
 
 class Lexer:
-    def __init__(self, source):
-        self.source = source
-        self.tokens = []
-        self.start = 0
-        self.current = 0
-        self.line = 1
+    def __init__(self, source: str):
+        self.source: str = source
+        self.tokens: List[Token] = []
+        self.start: int = 0
+        self.current: int = 0
+        self.line: int = 1
 
     def lex(self) -> List[Token]:
         while not self.is_end():
@@ -19,7 +20,7 @@ class Lexer:
 
         return self.tokens
 
-    def scan_token(self):
+    def scan_token(self) -> None:
         ch = self.advance()
 
         if ch == '(':
@@ -47,15 +48,15 @@ class Lexer:
         elif ch == '*':
             self.add_token(TokenType.STAR)
         elif ch == '!':
-            self.add_token(TokenType.EXCLAM_EQUAL if self.match('!=') else TokenType.EXCLAM)
+            self.add_token(TokenType.EXCLAM_EQUAL if self.match('=') else TokenType.EXCLAM)
         elif ch == '=':
-            self.add_token(TokenType.EQUAL_EQUAL if self.match('==') else TokenType.EQUAL)
+            self.add_token(TokenType.EQUAL_EQUAL if self.match('=') else TokenType.EQUAL)
         elif ch == '<':
-            self.add_token(TokenType.LESS_EQUAL if self.match('<=') else TokenType.LESS)
+            self.add_token(TokenType.LESS_EQUAL if self.match('=') else TokenType.LESS)
         elif ch == '>':
-            self.add_token(TokenType.GREATER_EQUAL if self.match('>=') else TokenType.GREATER)
+            self.add_token(TokenType.GREATER_EQUAL if self.match('=') else TokenType.GREATER)
         elif ch == '/':
-            if self.match('//'):
+            if self.match('/'):
                 while self.peek() != '\n' and not self.is_end():
                     self.advance()
             else:
@@ -71,10 +72,13 @@ class Lexer:
                 self.advance()
 
             if self.is_end():
-                raise InvalidSyntax('Unterminated string')
+                raise InvalidSyntaxError('Unterminated string')
 
             self.advance()
-            self.add_token(TokenType.DOUBLE_STRING if ch == '"' else TokenType.SINGLE_STRING)
+            self.add_token(
+                TokenType.DOUBLE_STRING if ch == '"' else TokenType.SINGLE_STRING,
+                self.source[self.start: self.current].strip(ch)
+            )
         elif Lexer.is_digit(ch):
             while Lexer.is_digit(self.peek()):
                 self.advance()
@@ -96,7 +100,7 @@ class Lexer:
             else:
                 self.add_token(TokenType.IDENTIFIER)
         else:
-            raise InvalidSyntax('Unexpected token')
+            raise InvalidSyntaxError('Unexpected token: ' + ch)
 
     def is_end(self) -> bool:
         return self.current >= len(self.source)

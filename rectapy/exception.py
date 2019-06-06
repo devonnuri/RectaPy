@@ -1,2 +1,2 @@
-class InvalidSyntax(Exception):
+class InvalidSyntaxError(Exception):
     pass
