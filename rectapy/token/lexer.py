@@ -5,11 +5,11 @@ from rectapy import Token, TokenType, InvalidSyntaxError
 
 class Lexer:
     def __init__(self, source: str):
-        self.source: str = source
-        self.tokens: List[Token] = []
-        self.start: int = 0
-        self.current: int = 0
-        self.line: int = 1
+        self.source = source
+        self.tokens = []
+        self.start = 0
+        self.current = 0
+        self.line = 1
 
     def lex(self) -> List[Token]:
         while not self.is_end():

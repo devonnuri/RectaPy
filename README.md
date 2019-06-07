@@ -4,11 +4,14 @@
 
 ## Usage
 
+Works at `python>=3.7`
+
 > python -m rectapy [filename]
 
 ## Todo List
 
 * [x] Lexer implementation
+* [ ] Parser implementation
 
 ## Example
 
@@ -16,8 +19,11 @@
 
 ```
 (1+1).print()
+// Output: 2
 ```
 
 ```
-[input(), input()].map(int).reduce(+).print()
+input().split().map(int).reduce(+).print()
+// Input: 2 4
+// Output: 6
 ```

@@ -1,7 +1,6 @@
 from .exception import InvalidSyntaxError
 
-from .tokentype import TokenType
-from .token import Token
-from .lexer import Lexer
+from .token import TokenType, Token, Lexer
+from .parser import Parser, Statement, Expression
 
 from .rectapy import RectaPy
