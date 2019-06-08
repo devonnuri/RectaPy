@@ -77,9 +77,9 @@ class Binary(Expression, Generic[R]):
 
 
 class Call(Expression, Generic[R]):
-    def __init__(self, callee: Expression, paren: Token, arguments: List[Expression]):
+    def __init__(self, callee: Expression, parenthesis: Token, arguments: List[Expression]):
         self.callee = callee
-        self.paren = paren
+        self.parenthesis = parenthesis
         self.arguments = arguments
 
     def accept(self, visitor: ExprVisitor[R]) -> R:
@@ -104,7 +104,7 @@ class Grouping(Expression, Generic[R]):
 
 
 class Literal(Expression, Generic[R]):
-    def __init__(self, value: Expression):
+    def __init__(self, value: object):
         self.value = value
 
     def accept(self, visitor: ExprVisitor[R]) -> R:
@@ -132,7 +132,7 @@ class Set(Expression, Generic[R]):
 
 
 class Unary(Expression, Generic[R]):
-    def __init__(self, operator: Token, right: Token):
+    def __init__(self, operator: Token, right: Expression):
         self.operator = operator
         self.right = right
 

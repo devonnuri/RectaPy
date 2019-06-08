@@ -3,7 +3,8 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, List
 
-from rectapy import Expression as Expr, Token
+from .expression import Expression as Expr
+from rectapy import Token
 
 R = TypeVar('R')
 
@@ -113,9 +114,10 @@ class While(Statement, Generic[R]):
 
 
 class For(Statement, Generic[R]):
-    def __init__(self, variable: Token, sequence: Expr):
-        self.variable = variable
-        self.sequence = sequence
+    def __init__(self, element: Token, iterable: Expr, body: Statement):
+        self.element = element
+        self.iterable = iterable
+        self.body = body
 
     def accept(self, visitor: StmtVisitor[R]) -> R:
         return visitor.visit_for(self)

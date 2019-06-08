@@ -1,6 +1,8 @@
 from typing import List, Optional
 
-from rectapy import Token, TokenType, InvalidSyntaxError
+from .token import Token
+from .tokentype import TokenType
+from rectapy import InvalidSyntaxError
 
 
 class Lexer:

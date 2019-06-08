@@ -1,6 +1,6 @@
 from typing import Optional
 
-from rectapy import TokenType
+from .tokentype import TokenType
 
 
 class Token:

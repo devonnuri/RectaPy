@@ -1,3 +1,2 @@
-from .expression import Expression
-from .statement import Statement
+from . import statement, expression
 from .parser import Parser

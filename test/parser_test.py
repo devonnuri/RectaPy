@@ -1,4 +1,4 @@
-from rectapy import Lexer
+from rectapy import Lexer, Parser
 
 if __name__ == '__main__':
     lexer = Lexer("""
@@ -9,5 +9,9 @@ for i in range(10) {
 """.strip())
 
     tokens = lexer.lex()
+    print('Lex finished')
 
-    print('\n'.join(map(str, tokens)))
+    parser = Parser(tokens)
+
+    statements = parser.parse()
+

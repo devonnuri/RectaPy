@@ -1,6 +1,6 @@
-from .exception import InvalidSyntaxError
+from .exception import *
 
-from .token import TokenType, Token, Lexer
-from .parser import Parser, Statement, Expression
+from .token import *
+from .parser import *
 
 from .rectapy import RectaPy

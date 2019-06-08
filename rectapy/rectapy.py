@@ -8,8 +8,6 @@ class RectaPy:
 
         tokens = lexer.lex()
 
-        print('\n'.join(map(str, tokens)))
-
     @staticmethod
     def run_file(filename: str) -> None:
         with open(filename, 'r') as f:

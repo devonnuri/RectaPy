@@ -39,10 +39,14 @@ class TokenType(Enum):
     ELSE = 'else'
     AND = 'and'
     OR = 'or'
+    FUN = 'fun'
+    VAR = 'var'
     TRUE = 'true'
     FALSE = 'false'
+    NULL = 'null'
     FOR = 'for'
     WHILE = 'while'
+    IN = 'in'
     RETURN = 'return'
 
     @classmethod
