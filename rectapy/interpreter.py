@@ -78,7 +78,15 @@ class Interpreter(expr.ExprVisitor, stmt.StmtVisitor):
         return expression.value
 
     def visit_logical(self, expression: expr.Logical):
-        pass
+        left = self.evaluate(expression.left)
+
+        if expression.operator.type == TokenType.OR:
+            if is_truthy(left):
+                return left
+        elif not is_truthy(left):
+            return left
+
+        return self.evaluate(expression.right)
 
     def visit_set(self, expression: expr.Set):
         pass
@@ -110,23 +118,27 @@ class Interpreter(expr.ExprVisitor, stmt.StmtVisitor):
         pass
 
     def visit_if(self, statement: stmt.If):
+        if is_truthy(self.evaluate(statement.condition)):
+            self.execute(statement.then_branch)
+        elif statement.else_branch is not None:
+            self.execute(statement.else_branch)
+
+    def visit_return(self, statement: stmt.Return):
         pass
 
-    def visit_return(self, expression: stmt.Return):
-        pass
-
-    def visit_variable_set(self, expression: stmt.Var):
-
+    def visit_variable_set(self, statement: stmt.Var):
         value = None
-        if expression.initializer is not None:
-            value = self.evaluate(expression.initializer)
+        if statement.initializer is not None:
+            value = self.evaluate(statement.initializer)
 
-        self.environment.define(expression.name.lexeme, value)
+        self.environment.define(statement.name.lexeme, value)
 
-    def visit_while(self, expression: stmt.While):
-        pass
+    def visit_while(self, statement: stmt.While):
+        while is_truthy(self.evaluate(statement.condition)):
+            self.execute(statement.body)
 
-    def visit_for(self, expression: stmt.For):
+    def visit_for(self, statement: stmt.For):
+        # TODO: Implement for statement
         pass
 
 
