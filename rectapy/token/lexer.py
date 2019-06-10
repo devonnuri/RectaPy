@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from .token import Token
 from .tokentype import TokenType
-from rectapy import InvalidSyntaxError
+from rectapy import SyntaxError
 
 
 class Lexer:
@@ -74,21 +74,21 @@ class Lexer:
                 self.advance()
 
             if self.is_end():
-                raise InvalidSyntaxError('Unterminated string')
+                raise SyntaxError('Unterminated string')
 
             self.advance()
             self.add_token(
                 TokenType.DOUBLE_STRING if ch == '"' else TokenType.SINGLE_STRING,
                 self.source[self.start: self.current].strip(ch)
             )
-        elif Lexer.is_digit(ch):
-            while Lexer.is_digit(self.peek()):
+        elif is_digit(ch):
+            while is_digit(self.peek()):
                 self.advance()
 
             if self.peek() == '.':
                 self.advance()
 
-                while Lexer.is_digit(self.peek()):
+                while is_digit(self.peek()):
                     self.advance()
 
             self.add_token(TokenType.NUMBER, float(self.source[self.start: self.current]))
@@ -102,7 +102,7 @@ class Lexer:
             else:
                 self.add_token(TokenType.IDENTIFIER)
         else:
-            raise InvalidSyntaxError('Unexpected token: ' + ch)
+            raise SyntaxError('Unexpected token: ' + ch)
 
     def is_end(self) -> bool:
         return self.current >= len(self.source)
@@ -126,6 +126,6 @@ class Lexer:
     def add_token(self, token_type: TokenType, literal: Optional[object] = None) -> None:
         self.tokens.append(Token(token_type, self.source[self.start: self.current], literal))
 
-    @staticmethod
-    def is_digit(ch: str) -> bool:
-        return '0' <= ch <= '9' if ch else False
+
+def is_digit(ch: str) -> bool:
+    return '0' <= ch <= '9' if ch else False

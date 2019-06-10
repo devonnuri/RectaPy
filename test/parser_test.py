@@ -9,7 +9,6 @@ for i in range(10) {
 """.strip())
 
     tokens = lexer.lex()
-    print('Lex finished')
 
     parser = Parser(tokens)
 

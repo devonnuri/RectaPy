@@ -11,7 +11,8 @@ Works at `python>=3.7`
 ## Todo List
 
 * [x] Lexer implementation
-* [ ] Parser implementation
+* [x] Parser implementation
+* [ ] Evaluate with visitor pattern
 
 ## Example
 
