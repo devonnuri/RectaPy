@@ -1,11 +1,12 @@
 from typing import List
 
-from rectapy import TokenType, Environment, RuntimeError, expression as expr, statement as stmt
+from rectapy import TokenType, Environment, RuntimeError, expression as expr, statement as stmt, Callable
 
 
 class Interpreter(expr.ExprVisitor, stmt.StmtVisitor):
     def __init__(self):
-        self.environment = Environment()
+        self.globals = Environment()
+        self.environment = self.globals
 
     def interpret(self, statements: List[stmt.Statement]):
         try:
@@ -66,7 +67,16 @@ class Interpreter(expr.ExprVisitor, stmt.StmtVisitor):
         return None
 
     def visit_call(self, expression: expr.Call):
-        pass
+        callee = self.evaluate(expression.callee)
+        arguments = list(map(self.evaluate, expression.arguments))
+
+        if not isinstance(callee, Callable):
+            raise RuntimeError('Only functions are callable.')
+
+        if len(arguments) != callee.arity():
+            raise RuntimeError(f'Expected {callee.arity()} arguments but got {len(arguments)}.')
+
+        return callee.call(self, arguments)
 
     def visit_get(self, expression: expr.Get):
         pass
