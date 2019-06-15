@@ -1,6 +1,7 @@
 from typing import List
 
-from rectapy import TokenType, Environment, RuntimeError, expression as expr, statement as stmt, Callable
+from rectapy import TokenType, Environment, RuntimeError, expression as expr, statement as stmt, Callable, Function, \
+    ReturnTrigger
 
 
 class Interpreter(expr.ExprVisitor, stmt.StmtVisitor):
@@ -125,7 +126,8 @@ class Interpreter(expr.ExprVisitor, stmt.StmtVisitor):
         pass
 
     def visit_function(self, statement: stmt.Function):
-        pass
+        function = Function(statement)
+        self.environment.define(statement.name.lexeme, function)
 
     def visit_if(self, statement: stmt.If):
         if is_truthy(self.evaluate(statement.condition)):
@@ -134,7 +136,9 @@ class Interpreter(expr.ExprVisitor, stmt.StmtVisitor):
             self.execute(statement.else_branch)
 
     def visit_return(self, statement: stmt.Return):
-        pass
+        value = None if statement.value is None else self.evaluate(statement.value)
+
+        raise ReturnTrigger(value)
 
     def visit_variable_set(self, statement: stmt.Var):
         value = None

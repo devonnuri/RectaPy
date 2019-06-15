@@ -52,6 +52,13 @@ class Parser:
         if self.match(TokenType.LEFT_BRACE):
             return stmt.Block(self.block())
 
+        return self.expressionStatement()
+
+    def expressionStatement(self) -> stmt.Statement:
+        expression = self.expression()
+        self.consume(TokenType.SEMICOLON, 'Expect \';\' after expression.')
+        return stmt.Expression(expression)
+
     def _for(self) -> stmt.Statement:
         element = self.consume(TokenType.IDENTIFIER, 'Expect element after \'for\'.')
         self.consume(TokenType.IN, 'Expect \'in\' after element.')

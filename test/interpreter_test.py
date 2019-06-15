@@ -2,16 +2,13 @@ from rectapy import Lexer, Parser, Interpreter
 
 if __name__ == '__main__':
     lexer = Lexer("""
-var a = "global a";
-var b = "global b";
-var c = "global c";
-{
-  var a = "outer a";
-  var b = "outer b";
-  {
-    var a = "inner a";
-  }
+fun fibonacci(n) {
+  if (n <= 1) return n;
+  return fibonacci(n - 2) + fibonacci(n - 1);
 }
+
+fibonacci(5);
+
 """.strip())
 
     tokens = lexer.lex()

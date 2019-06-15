@@ -8,3 +8,8 @@ class ParseError(Exception):
 
 class RuntimeError(Exception):
     pass
+
+
+class ReturnTrigger(RuntimeError):
+    def __init__(self, value):
+        self.value = value
