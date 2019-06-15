@@ -1,30 +1,21 @@
-# RectaPy
+<h1 align="center">RectaPy</h1>
 
 > Python Implementation of Recta Language
 
-## Usage
+## 📖 Prerequisites
 
-Works at `python>=3.7`
+* python >= 3.7
+
+## 🚀 Usage
 
 > python -m rectapy [filename]
 
-## Todo List
+## 📝 Todo List
 
 * [x] Lexer implementation
 * [x] Parser implementation
 * [ ] Evaluate with visitor pattern
 
-## Example
+## 🤝 Contributing
 
-*Most of the examples are not implemented yet.*
-
-```
-(1+1).print()
-// Output: 2
-```
-
-```
-input().split().map(int).reduce(+).print()
-// Input: 2 4
-// Output: 6
-```
+Contributions, issues and feature requests are welcome. Feel free to send me PRs, issues, etc.
