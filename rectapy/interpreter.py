@@ -10,17 +10,20 @@ class Interpreter(expr.ExprVisitor, stmt.StmtVisitor):
         self.environment = self.globals
 
     def interpret(self, statements: List[stmt.Statement]):
+        last_value = None
         try:
             for statement in statements:
-                self.execute(statement)
+                last_value = self.execute(statement)
         except RuntimeError as error:
             print(error)
+
+        return stringify(last_value)
 
     def evaluate(self, expression: expr.Expression):
         return expression.accept(self)
 
     def execute(self, statement: stmt.Statement):
-        statement.accept(self)
+        return statement.accept(self)
 
     def execute_block(self, statements: List[stmt.Statement], environment: Environment):
         previous = self.environment
@@ -120,13 +123,13 @@ class Interpreter(expr.ExprVisitor, stmt.StmtVisitor):
         return self.environment.get(expression.name)
 
     def visit_block(self, statement: stmt.Block):
-        pass
+        self.execute_block(statement.statements, Environment(self.environment))
 
     def visit_expression(self, statement: stmt.Expression):
-        pass
+        return self.evaluate(statement.expression)
 
     def visit_function(self, statement: stmt.Function):
-        function = Function(statement)
+        function = Function(statement, self.environment)
         self.environment.define(statement.name.lexeme, function)
 
     def visit_if(self, statement: stmt.If):

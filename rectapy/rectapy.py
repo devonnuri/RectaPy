@@ -1,23 +1,29 @@
-from rectapy import Lexer
+from typing import Any
+
+import rectapy
 
 
 class RectaPy:
-    @staticmethod
-    def run(code: str) -> None:
-        lexer = Lexer(code)
+    def __init__(self):
+        self.interpreter = rectapy.Interpreter()
 
+    def run(self, code: str) -> Any:
+        lexer = rectapy.Lexer(code)
         tokens = lexer.lex()
 
-    @staticmethod
-    def run_file(filename: str) -> None:
-        with open(filename, 'r') as f:
-            RectaPy.run(f.read())
+        parser = rectapy.Parser(tokens)
+        statements = parser.parse()
 
-    @staticmethod
-    def run_prompt() -> None:
+        return self.interpreter.interpret(statements)
+
+    def run_file(self, filename: str) -> None:
+        with open(filename, 'r') as f:
+            self.run(f.read())
+
+    def run_prompt(self) -> None:
         try:
             while True:
                 print('> ', end='')
-                RectaPy.run(input())
+                print(self.run(input()))
         except KeyboardInterrupt:
             pass

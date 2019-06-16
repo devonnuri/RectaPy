@@ -4,10 +4,11 @@ from rectapy import RectaPy
 
 
 def main() -> None:
+    rectapy = RectaPy()
     if len(sys.argv) == 1:
-        RectaPy.run_prompt()
+        rectapy.run_prompt()
     elif len(sys.argv) == 2:
-        RectaPy.run_file(sys.argv[1])
+        rectapy.run_file(sys.argv[1])
     else:
         print('Usage: rectapy [filename]')
         exit(64)

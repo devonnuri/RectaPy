@@ -8,7 +8,13 @@
 
 ## 🚀 Usage
 
+### Run from a file
+
 > python -m rectapy [filename]
+
+### Run a prompt
+
+> python -m rectapy
 
 ## 📝 Todo List
 

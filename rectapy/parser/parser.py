@@ -167,7 +167,7 @@ class Parser:
         while self.match(TokenType.EXCLAM_EQUAL, TokenType.EQUAL_EQUAL):
             operator = self.peek(-1)
             right = self.comparison()
-            expression = expr.Logical(expression, operator, right)
+            expression = expr.Binary(expression, operator, right)
 
         return expression
 
@@ -177,7 +177,7 @@ class Parser:
         while self.match(TokenType.GREATER, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.LESS_EQUAL):
             operator = self.peek(-1)
             right = self.addition()
-            expression = expr.Logical(expression, operator, right)
+            expression = expr.Binary(expression, operator, right)
 
         return expression
 
