@@ -86,7 +86,7 @@ class Interpreter(expr.ExprVisitor, stmt.StmtVisitor):
         pass
 
     def visit_grouping(self, expression: expr.Grouping):
-        return self.evaluate(expression)
+        return self.evaluate(expression.expression)
 
     def visit_literal(self, expression: expr.Literal):
         return expression.value
