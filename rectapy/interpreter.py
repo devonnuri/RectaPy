@@ -1,6 +1,6 @@
 from typing import List
 
-from rectapy import TokenType, Environment, RuntimeError, expression as expr, statement as stmt, Callable, Function, \
+from rectapy import TokenType, Environment, RectaRuntimeError, expression as expr, statement as stmt, Callable, Function, \
     ReturnTrigger
 
 
@@ -14,16 +14,16 @@ class Interpreter(expr.ExprVisitor, stmt.StmtVisitor):
         try:
             for statement in statements:
                 last_value = self.execute(statement)
-        except RuntimeError as error:
+        except RectaRuntimeError as error:
             print(error)
 
         return stringify(last_value)
 
     def evaluate(self, expression: expr.Expression):
-        return expression.accept(self)
+        return expression.accept(self) if expression else None
 
     def execute(self, statement: stmt.Statement):
-        return statement.accept(self)
+        return statement.accept(self) if statement else None
 
     def execute_block(self, statements: List[stmt.Statement], environment: Environment):
         previous = self.environment
@@ -75,10 +75,10 @@ class Interpreter(expr.ExprVisitor, stmt.StmtVisitor):
         arguments = list(map(self.evaluate, expression.arguments))
 
         if not isinstance(callee, Callable):
-            raise RuntimeError('Only functions are callable.')
+            raise RectaRuntimeError('Only functions are callable.')
 
         if len(arguments) != callee.arity():
-            raise RuntimeError(f'Expected {callee.arity()} arguments but got {len(arguments)}.')
+            raise RectaRuntimeError(f'Expected {callee.arity()} arguments but got {len(arguments)}.')
 
         return callee.call(self, arguments)
 
@@ -115,7 +115,7 @@ class Interpreter(expr.ExprVisitor, stmt.StmtVisitor):
             if isinstance(right, float):
                 return -right
             else:
-                raise RuntimeError('Bad operand type for unary -')
+                raise RectaRuntimeError('Bad operand type for unary -')
 
         return None
 

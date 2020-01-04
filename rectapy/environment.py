@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Dict, Any, Optional
 
-from rectapy import Token, RuntimeError
+from rectapy import Token, RectaRuntimeError
 
 
 class Environment:
@@ -22,7 +22,7 @@ class Environment:
             self.enclosing.assign(key, value)
             return
 
-        raise RuntimeError(f'Undefined variable \'{key.lexeme}\'.')
+        raise RectaRuntimeError(f'Undefined variable \'{key.lexeme}\'.')
 
     def get(self, key: Token) -> Any:
         if key.lexeme in self.values:
@@ -31,5 +31,5 @@ class Environment:
         if self.enclosing is not None:
             return self.enclosing.get(key)
 
-        raise RuntimeError(f'Undefined variable \'{key.lexeme}\'.')
+        raise RectaRuntimeError(f'Undefined variable \'{key.lexeme}\'.')
 

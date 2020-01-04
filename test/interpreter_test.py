@@ -3,10 +3,10 @@ from rectapy import Lexer, Parser, Interpreter
 if __name__ == '__main__':
     lexer = Lexer("""
 fun fibonacci(n) {
-  if n <= 1 {
-    return n;
-  }
-  return fibonacci(n - 2) + fibonacci(n - 1);
+   if n <= 1 {
+     return n;
+   }
+   return fibonacci(n - 2) + fibonacci(n - 1);
 }
 
 fibonacci(10);

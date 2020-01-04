@@ -1,15 +1,15 @@
-class SyntaxError(Exception):
+class RectaSyntaxError(BaseException):
     pass
 
 
-class ParseError(Exception):
+class RectaParseError(BaseException):
     pass
 
 
-class RuntimeError(Exception):
+class RectaRuntimeError(BaseException):
     pass
 
 
-class ReturnTrigger(RuntimeError):
+class ReturnTrigger(RectaRuntimeError):
     def __init__(self, value):
         self.value = value

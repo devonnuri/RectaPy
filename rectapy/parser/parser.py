@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from . import expression as expr
 from . import statement as stmt
-from rectapy import Token, ParseError, TokenType
+from rectapy import Token, RectaParseError, TokenType
 
 
 class Parser:
@@ -29,7 +29,7 @@ class Parser:
                 return self.function()
 
             return self.statement()
-        except ParseError as error:
+        except RectaParseError as error:
             print(error)
 
             self.synchronize()
@@ -137,7 +137,7 @@ class Parser:
 
                 return expr.Set(expression.target, expression.name, value)
 
-            raise ParseError('Invalid assignment target.')
+            raise RectaParseError('Invalid assignment target.')
 
         return expression
 
@@ -255,7 +255,7 @@ class Parser:
             self.consume(TokenType.RIGHT_PAREN, 'Expect \')\' after expression.')
             return expr.Grouping(expression)
 
-        raise ParseError(self.peek(), 'Expect expression.')
+        raise RectaParseError(self.peek(), 'Expect expression.')
 
     def match(self, *types: TokenType) -> bool:
         for token_type in types:
@@ -269,7 +269,7 @@ class Parser:
         if self.check(token_type):
             return self.advance()
 
-        raise ParseError(message)
+        raise RectaParseError(message)
 
     def check(self, token_type: TokenType) -> bool:
         if self.is_end():

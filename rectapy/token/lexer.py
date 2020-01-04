@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from .token import Token
 from .tokentype import TokenType
-from rectapy import SyntaxError
+from rectapy import RectaSyntaxError
 
 
 class Lexer:
@@ -74,7 +74,7 @@ class Lexer:
                 self.advance()
 
             if self.is_end():
-                raise SyntaxError('Unterminated string')
+                raise RectaSyntaxError('Unterminated string')
 
             self.advance()
             self.add_token(
@@ -102,7 +102,7 @@ class Lexer:
             else:
                 self.add_token(TokenType.IDENTIFIER)
         else:
-            raise SyntaxError('Unexpected token: ' + ch)
+            raise RectaSyntaxError('Unexpected token: ' + ch)
 
     def is_end(self) -> bool:
         return self.current >= len(self.source)
