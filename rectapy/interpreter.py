@@ -143,6 +143,9 @@ class Interpreter(expr.ExprVisitor, stmt.StmtVisitor):
 
         raise ReturnTrigger(value)
 
+    def visit_print(self, statement: stmt.Print):
+        print(stringify(self.evaluate(statement.value)))
+
     def visit_variable_set(self, statement: stmt.Var):
         value = None
         if statement.initializer is not None:

@@ -48,6 +48,7 @@ class TokenType(Enum):
     WHILE = 'while'
     IN = 'in'
     RETURN = 'return'
+    PRINT = 'print'
 
     @classmethod
     def has_value(cls, value):

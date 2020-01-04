@@ -23,7 +23,7 @@ class Parser:
     def declaration(self) -> Optional[stmt.Statement]:
         try:
             if self.match(TokenType.VAR):
-                return self.var()
+                return self._var()
 
             if self.match(TokenType.FUN):
                 return self.function()
@@ -45,6 +45,9 @@ class Parser:
 
         if self.match(TokenType.RETURN):
             return self._return()
+
+        if self.match(TokenType.PRINT):
+            return self._print()
 
         if self.match(TokenType.WHILE):
             return self._while()
@@ -82,7 +85,7 @@ class Parser:
 
         return stmt.Return(keyword, value)
 
-    def var(self) -> stmt.Statement:
+    def _var(self) -> stmt.Statement:
         name = self.consume(TokenType.IDENTIFIER, 'Expect variable name.')
         initializer = self.expression() if self.match(TokenType.EQUAL) else None
         self.consume(TokenType.SEMICOLON, 'Expect \';\' after variable declaration.')
@@ -94,6 +97,12 @@ class Parser:
         body = self.statement()
 
         return stmt.While(condition, body)
+
+    def _print(self) -> stmt.Statement:
+        value = self.expression()
+        self.consume(TokenType.SEMICOLON, 'Expect \';\' after value.')
+
+        return stmt.Print(value)
 
     def function(self) -> stmt.Statement:
         name = self.consume(TokenType.IDENTIFIER, 'Expect function name')
@@ -296,7 +305,7 @@ class Parser:
                 return
 
             if self.peek().type in [TokenType.IF, TokenType.FUN, TokenType.VAR, TokenType.FOR, TokenType.WHILE,
-                                    TokenType.RETURN]:
+                                    TokenType.RETURN, TokenType.PRINT]:
                 return
 
             self.advance()
