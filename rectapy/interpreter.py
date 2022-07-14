@@ -1,6 +1,6 @@
-from typing import List
+from typing import List, Dict
 
-from rectapy import TokenType, Environment, RectaRuntimeError, expression as expr, statement as stmt, Callable, Function, \
+from rectapy import Token, TokenType, Environment, RectaRuntimeError, expression as expr, statement as stmt, Callable, Function, \
     ReturnTrigger
 
 
@@ -8,6 +8,7 @@ class Interpreter(expr.ExprVisitor, stmt.StmtVisitor):
     def __init__(self):
         self.globals = Environment()
         self.environment = self.globals
+        self.locals: Dict[expr.Expression, int] = {}
 
     def interpret(self, statements: List[stmt.Statement]):
         last_value = None
@@ -36,10 +37,22 @@ class Interpreter(expr.ExprVisitor, stmt.StmtVisitor):
         finally:
             self.environment = previous
 
+    def resolve(self, expression: expr.Expression, depth: int):
+        self.locals[expression] = depth
+
+    def lookup_variable(self, name: Token, expression: expr.Expression):
+        if expression in self.locals:
+            return self.environment.get_at(self.locals[expression], name.lexeme)
+        return self.globals.get(name)
+
     def visit_assign(self, expression: expr.Assign):
         value = self.evaluate(expression.value)
 
-        self.environment.assign(expression.value, value)
+        if expression in self.locals:
+            self.environment.assign_at(self.locals[expression], expression.value, value)
+        else:
+            self.globals.assign(expression.name, value)
+
         return value
 
     def visit_binary(self, expression: expr.Binary):
@@ -135,7 +148,7 @@ class Interpreter(expr.ExprVisitor, stmt.StmtVisitor):
     def visit_if(self, statement: stmt.If):
         if is_truthy(self.evaluate(statement.condition)):
             self.execute(statement.then_branch)
-        elif statement.else_branch is not None:
+        elif statement.else_branch:
             self.execute(statement.else_branch)
 
     def visit_return(self, statement: stmt.Return):
@@ -144,11 +157,11 @@ class Interpreter(expr.ExprVisitor, stmt.StmtVisitor):
         raise ReturnTrigger(value)
 
     def visit_print(self, statement: stmt.Print):
-        print(stringify(self.evaluate(statement.value)))
+        print(stringify(self.evaluate(statement.expression)))
 
     def visit_variable_set(self, statement: stmt.Var):
         value = None
-        if statement.initializer is not None:
+        if statement.initializer:
             value = self.evaluate(statement.initializer)
 
         self.environment.define(statement.name.lexeme, value)

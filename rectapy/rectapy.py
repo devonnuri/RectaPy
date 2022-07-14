@@ -6,13 +6,16 @@ import rectapy
 class RectaPy:
     def __init__(self):
         self.interpreter = rectapy.Interpreter()
+        self.resolver = rectapy.Resolver(self.interpreter)
 
-    def run(self, code: str) -> Any:
+    def run(self, code: str):
         lexer = rectapy.Lexer(code)
         tokens = lexer.lex()
 
         parser = rectapy.Parser(tokens)
         statements = parser.parse()
+
+        self.resolver.resolve(statements)
 
         return self.interpreter.interpret(statements)
 
@@ -24,6 +27,8 @@ class RectaPy:
         try:
             while True:
                 print('> ', end='')
-                print(self.run(input()))
+                result = self.run(input())
+                if result:
+                    print(result)
         except KeyboardInterrupt:
             pass

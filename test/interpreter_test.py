@@ -1,3 +1,6 @@
+import sys, os
+sys.path.append(os.path.abspath('../'))
+
 from rectapy import Lexer, Parser, Interpreter
 
 if __name__ == '__main__':

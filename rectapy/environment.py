@@ -13,18 +13,29 @@ class Environment:
     def define(self, key: str, value: Any) -> None:
         self.values[key] = value
 
-    def assign(self, key: Token, value: Any) -> None:
+    def ancestor(self, distance: int):
+        environment = self
+        for i in range(distance):
+            environment = environment.enclosing
+
+        return environment
+
+    def get_at(self, distance: int, name: str):
+        return self.ancestor(distance).values[name]
+
+    def assign(self, key: Token, value: Any):
         if key.lexeme in self.values:
             self.values[key.lexeme] = value
-            return
 
-        if self.enclosing is not None:
+        if self.enclosing:
             self.enclosing.assign(key, value)
-            return
 
         raise RectaRuntimeError(f'Undefined variable \'{key.lexeme}\'.')
 
-    def get(self, key: Token) -> Any:
+    def assign_at(self, distance: int, name: Token, value: Any):
+        self.ancestor(distance).values[name.lexeme] = value
+
+    def get(self, key: Token):
         if key.lexeme in self.values:
             return self.values[key.lexeme]
 

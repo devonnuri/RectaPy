@@ -28,23 +28,23 @@ class StmtVisitor(ABC):
         pass
 
     @abstractmethod
-    def visit_return(self, expression: Return):
+    def visit_return(self, statement: Return):
         pass
 
     @abstractmethod
-    def visit_print(self, expression: Print):
+    def visit_print(self, statement: Print):
         pass
 
     @abstractmethod
-    def visit_variable_set(self, expression: Var):
+    def visit_variable_set(self, statement: Var):
         pass
 
     @abstractmethod
-    def visit_while(self, expression: While):
+    def visit_while(self, statement: While):
         pass
 
     @abstractmethod
-    def visit_for(self, expression: For):
+    def visit_for(self, statement: For):
         pass
 
 
@@ -98,9 +98,10 @@ class Return(Statement):
     def accept(self, visitor):
         return visitor.visit_return(self)
 
+
 class Print(Statement):
-    def __init__(self, value: Expr):
-        self.value = value
+    def __init__(self, expression: Expr):
+        self.expression = expression
 
     def accept(self, visitor: StmtVisitor):
         return visitor.visit_print(self)
